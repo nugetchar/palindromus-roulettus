@@ -1,0 +1,20 @@
+.a-bit-larger-txt {
+    font-size: 1.2em;
+}
+
+.size-l {
+    display: none;
+}
+
+.size-m {
+    display: initial;
+}
+
+@media (min-width: 600px) {
+    .size-m {
+        display: none;
+    }
+    .size-l {
+        display: initial;
+    }
+}

@@ -1,0 +1,44 @@
+@import "index.scss";
+
+.game {
+    max-width: 900px;
+    margin: auto;
+    min-height: $gameMinHeight;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+
+    &__launch-btn, &__reset-btn {
+        height: 50px;
+        background-color: $pink;
+        font-weight: 600;
+        border: 1px solid $white;
+        color: $white;
+        letter-spacing: $base-gap;
+        font-size: 18px;
+        padding: 0 $gap-2X;
+        cursor: pointer;
+    }
+
+    &__time {
+        font-size: 30px;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    &__zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__choices > button {
+        width: 60px;
+        height: 60px;
+        margin: 8px;
+        cursor: pointer;
+    }
+
+}

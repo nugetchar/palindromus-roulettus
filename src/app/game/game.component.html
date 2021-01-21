@@ -1,0 +1,22 @@
+
+
+<div class="game">
+    <ng-container *ngIf="!started; else game">
+        <button class="game__launch-btn" (click)="startGame()">Start Game</button>
+    </ng-container>
+</div>
+
+<ng-template #game>
+    <div class="game__zone">
+        <p class="game__time">{{timeLeft}}</p>
+        <h3 class="game__word">{{word}}</h3>
+        <div class="game__choices">
+            <button [disabled]="ended || generatingNewWord" (click)="checkAnswer(word, false)">No</button>
+            <button [disabled]="ended || generatingNewWord" (click)="checkAnswer(word, true)">Yes</button>
+        </div>
+
+        <p class="game__result">{{score}}</p>
+        <button *ngIf="ended" class="game__reset-btn" (click)="resetGame()">Reset Game</button>
+    </div>
+
+</ng-template>

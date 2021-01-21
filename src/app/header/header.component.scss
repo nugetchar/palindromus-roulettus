@@ -1,0 +1,16 @@
+@import "index.scss";
+
+.header {
+    min-height: $headerMinHeight;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 $base-gap;
+    background: #EC407A;
+    align-items: center;
+    color: black;
+
+    > h1 {
+        width: 100%;
+        text-align: center;
+    }
+}
