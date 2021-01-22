@@ -8,15 +8,19 @@
 
 <ng-template #game>
     <div class="game__zone">
-        <p class="game__time">{{timeLeft}}</p>
+        <p class="game__time">Time Left: {{timeLeft}}</p>
         <h3 class="game__word">{{word}}</h3>
         <div class="game__choices">
             <button [disabled]="ended || generatingNewWord" (click)="checkAnswer(word, false)">No</button>
             <button [disabled]="ended || generatingNewWord" (click)="checkAnswer(word, true)">Yes</button>
         </div>
 
-        <p class="game__result">{{score}}</p>
-        <button *ngIf="ended" class="game__reset-btn" (click)="resetGame()">Reset Game</button>
+        <p class="game__result">Score: {{score}}</p>
+        <ng-container *ngIf="ended">
+            <app-twitter-share [tweetTxt]="tweetTxt" via="nugetchar">Share your score on Twitter!</app-twitter-share>
+            <button class="game__reset-btn" (click)="resetGame()">Reset Game</button>
+        </ng-container>
+
     </div>
 
 </ng-template>

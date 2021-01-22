@@ -31,7 +31,7 @@ export class GameComponent implements OnInit {
   startGame() {
     this.ended = false;
     this.started = true;
-    this.initialTimeLeft = 2000;
+    this.initialTimeLeft = 500;
     this.score = 0;
     this.resetInterval();
     this.nextWord();
@@ -55,12 +55,16 @@ export class GameComponent implements OnInit {
     }
   }
 
+  get tweetTxt() {
+    return `I scored ${this.score} on Palindromus Roulettus!`
+  }
+
   private shouldDecreaseInitialTimeLeft(score: number) {
     return score % GameComponent.decreaseInterval === 0;
   }
 
   private decreaseInitialTimeLeft() {
-    if ((this.initialTimeLeft - 100) > 300) {
+    if ((this.initialTimeLeft - 100) > 200) {
       this.initialTimeLeft -= 100;
     }
   }
@@ -86,7 +90,7 @@ export class GameComponent implements OnInit {
 
   private nextWord() {
     this.generatingNewWord = true;
-    this.word = this.generateWordOrPalindrome();
+    while((this.word = this.generateWordOrPalindrome()) === ''){}
     this.generatingNewWord = false;
   }
 
