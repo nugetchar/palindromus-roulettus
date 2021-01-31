@@ -19,7 +19,7 @@ export class GameComponent implements OnInit {
   private interval!: number;
   private initialTimeLeft!: number;
 
-  private static readonly vowels = 'aeiouy '.split('');
+  private static readonly vowels = 'aeiouy'.split('');
   private static readonly consonnants = 'bcdfghjklmnpqrstvwxz'.split('');
   private static readonly decreaseInterval = 5;
 
@@ -42,8 +42,8 @@ export class GameComponent implements OnInit {
     this.startGame();
   }
 
-  checkAnswer(word: string, isPalindrome: boolean) {
-    if (this.checkIsPalindrome(word) !== isPalindrome) {
+  checkAnswer(word: string, expectedPalindrome: boolean) {
+    if (this.checkIsPalindrome(word) !== expectedPalindrome) {
       this.endGame();
     } else {
       this.incrementScore();
@@ -96,7 +96,7 @@ export class GameComponent implements OnInit {
 
   private generateWordOrPalindrome(): string {
     const willBePalindrome = Math.random();
-    const length = Math.floor(Math.random() * 20) + 1;
+    const length = Math.floor(Math.random() * 20) + 2;
     if (willBePalindrome > 0.5) {
       return this.generatePalindrome(length);
     } else {
@@ -121,8 +121,9 @@ export class GameComponent implements OnInit {
 
   private generateWord(length: number) {
     let res = '';
+
     for (let i = 0; i < length; i++) {
-      if (this.shouldPickVowel(i)) {
+      if (this.shouldPickVowelForNextLetter(res)) {
         res += this.pickRandomLetterFrom(GameComponent.vowels);
       } else {
         res += this.pickRandomLetterFrom(GameComponent.consonnants);
@@ -135,8 +136,8 @@ export class GameComponent implements OnInit {
     return lettersArray[Math.floor(Math.random() * lettersArray.length)];
   }
 
-  private shouldPickVowel(i: number) {
-    return i%2 === 0;
+  private shouldPickVowelForNextLetter(word: string) {
+    return this.isConsonnant(word[word.length - 1]);
   }
 
   private checkIsPalindrome(word: string = ''): boolean {
@@ -146,6 +147,10 @@ export class GameComponent implements OnInit {
   private endGame() {
     this.ended = true;
     window.clearInterval(this.interval);
+  }
+
+  private isConsonnant(letter: string) {
+    return GameComponent.consonnants.includes(letter);
   }
 
 }
