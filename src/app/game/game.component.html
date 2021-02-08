@@ -8,7 +8,7 @@
 
 <ng-template #game>
     <div class="game__zone">
-        <p class="game__time">Time Left: {{timeLeft}}</p>
+        <p class="game__time">Time Left: <span id="tempsRestant">{{timeLeft}}</span></p>
         <h3 class="game__word">{{word}}</h3>
         <div class="game__choices">
             <button [disabled]="ended || generatingNewWord" (click)="checkAnswer(word, false)">No</button>

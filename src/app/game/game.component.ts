@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, NgZone, OnInit } from '@angular/core';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+  styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
 
@@ -22,6 +23,8 @@ export class GameComponent implements OnInit {
   private static readonly vowels = 'aeiouy'.split('');
   private static readonly consonnants = 'bcdfghjklmnpqrstvwxz'.split('');
   private static readonly decreaseInterval = 5;
+  private static readonly MIN_WORD_LENTGH = 2;
+  private static readonly MIN_TRAP_WORD_LENGTH = 4;
 
   constructor() { }
 
@@ -31,7 +34,7 @@ export class GameComponent implements OnInit {
   startGame() {
     this.ended = false;
     this.started = true;
-    this.initialTimeLeft = 500;
+    this.initialTimeLeft = 2000;
     this.score = 0;
     this.resetInterval();
     this.nextWord();
@@ -42,8 +45,8 @@ export class GameComponent implements OnInit {
     this.startGame();
   }
 
-  checkAnswer(word: string, expectedPalindrome: boolean) {
-    if (this.checkIsPalindrome(word) !== expectedPalindrome) {
+  checkAnswer(word: string, expectedPalindrom: boolean) {
+    if (this.checkIsPalindrom(word) !== expectedPalindrom) {
       this.endGame();
     } else {
       this.incrementScore();
@@ -61,6 +64,15 @@ export class GameComponent implements OnInit {
 
   private shouldDecreaseInitialTimeLeft(score: number) {
     return score % GameComponent.decreaseInterval === 0;
+  }
+
+  @HostListener('window:keyup', ['$event.key'])
+  onKeyUp(key: string) {
+    if (key === 'ArrowRight') {
+      this.checkAnswer(this.word, true);
+    } else if (key === 'ArrowLeft') {
+      this.checkAnswer(this.word, false);
+    }
   }
 
   private decreaseInitialTimeLeft() {
@@ -90,21 +102,26 @@ export class GameComponent implements OnInit {
 
   private nextWord() {
     this.generatingNewWord = true;
-    while((this.word = this.generateWordOrPalindrome()) === ''){}
+    while((this.word = this.generateWordOrPalindrom()) === ''){}
     this.generatingNewWord = false;
   }
 
-  private generateWordOrPalindrome(): string {
-    const willBePalindrome = Math.random();
-    const length = Math.floor(Math.random() * 20) + 2;
-    if (willBePalindrome > 0.5) {
-      return this.generatePalindrome(length);
+  private generateWordOrPalindrom(): string {
+    const willBePalindrom = Math.random();
+    const itsATrap = Math.random();
+    const {MIN_TRAP_WORD_LENGTH, MIN_WORD_LENTGH} = GameComponent;
+    const length = Math.floor(Math.random() * 20) + (itsATrap ? MIN_TRAP_WORD_LENGTH : MIN_WORD_LENTGH);
+
+    if (itsATrap > 0.9) {
+      return this.generateFalsePalindrom(length);
+    } else if (willBePalindrom > 0.5) {
+      return this.generatePalindrom(length);
     } else {
       return this.generateWord(length);
     }
   }
 
-  private generatePalindrome(length: number) {
+  private generatePalindrom(length: number) {
     let res = '';
     const halfWord = this.generateWord(Math.floor(length / 2));
     if (length % 2 === 0) {
@@ -113,6 +130,11 @@ export class GameComponent implements OnInit {
       res = halfWord + this.generateWord(1) + this.reverseWord(halfWord);
     }
     return res;
+  }
+
+  private generateFalsePalindrom(length: number) {
+    let res = this.generatePalindrom(length - 1);
+    return `${res.substring(0, res.length / 2)}${this.generatePalindrom(1)}${res.substring(res.length / 2, res.length)}`;
   }
 
   private reverseWord(word: string) {
@@ -140,7 +162,7 @@ export class GameComponent implements OnInit {
     return this.isConsonnant(word[word.length - 1]);
   }
 
-  private checkIsPalindrome(word: string = ''): boolean {
+  private checkIsPalindrom(word: string = ''): boolean {
     return this.reverseWord(word.toLowerCase().replace(/ /g, '')) === word.toLowerCase().replace(/ /g, '');
   }
 
