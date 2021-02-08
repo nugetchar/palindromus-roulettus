@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/palindromeRoulette'),
+      dir: require('path').join(__dirname, './coverage/palindromus-roulettus'),
       subdir: '.',
       reporters: [
         { type: 'html' },
